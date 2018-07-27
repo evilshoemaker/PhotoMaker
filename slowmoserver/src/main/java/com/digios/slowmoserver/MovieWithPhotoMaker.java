@@ -19,7 +19,7 @@ public class MovieWithPhotoMaker implements MovieMaker {
     }
 
     private List<File> createVideoFromImage(List<File> photoFiles) {
-        List<File> files = new ArrayList<>();
+        List<File> files = new ArrayList<File>();
 
 
 
