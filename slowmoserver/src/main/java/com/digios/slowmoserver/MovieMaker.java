@@ -1,5 +1,7 @@
 package com.digios.slowmoserver;
 
+import java.io.IOException;
+
 public interface MovieMaker {
-    String render();
+    String render() throws IOException;
 }
