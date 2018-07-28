@@ -8,10 +8,16 @@ import java.util.List;
 
 public class AdbDevice implements Device {
     final static Logger logger = Logger.getLogger(AdbDevice.class);
-    private static String ADB_PATH = "";
+    private static String ADB_PATH = Config.INSTANCE.adbPath();
 
-    public AdbDevice(String adbPath) {
-        ADB_PATH = adbPath;
+    private String deviceId;
+
+    public AdbDevice(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class AdbDevice implements Device {
     }
 
     @Override
-    public void callPhoto(String deviceId) {
+    public void callPhoto() {
         String command = String.format("adb -s %s shell input keyevent 27", deviceId);
         String result = Utils.executeCommand(command);
         if (!result.isEmpty())
@@ -42,7 +48,7 @@ public class AdbDevice implements Device {
     }
 
     @Override
-    public void callSlowmo(String deviceId) {
+    public void callSlowmo() {
         String command = String.format("adb -s %s shell input keyevent 130", deviceId);
         String result = Utils.executeCommand(command);
         if (!result.isEmpty())
@@ -50,15 +56,27 @@ public class AdbDevice implements Device {
     }
 
     @Override
-    public void pullFile(String deviceId, String source, String target) {
+    public List<String> pullFiles(String source, String target) {
         String command = String.format("adb -s %s pull -a %s \"%s\"", deviceId, source, target);
         String result = Utils.executeCommand(command);
         if (!result.isEmpty())
             logger.info(result);
+
+        List<String> files = new ArrayList<>();
+
+        String lines[] = result.split("\\r?\\n");
+        for (String line : lines) {
+            int d = line.indexOf("->");
+            if (d != -1) {
+                files.add(line.substring(d + 3));
+            }
+        }
+
+        return files;
     }
 
     @Override
-    public void clearFolder(String deviceId, String path) {
+    public void clearFolder(String path) {
         String command = String.format("adb -s %s shell ls %s", deviceId, path);
         String result = Utils.executeCommand(command);
 

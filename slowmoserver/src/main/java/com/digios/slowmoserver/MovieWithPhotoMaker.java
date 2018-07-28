@@ -16,13 +16,13 @@ public class MovieWithPhotoMaker implements MovieMaker {
     private List<File> videoFiles;
     private List<File> photoFiles;
 
-    private static String FFMPEG_PATH = Config.INSTANCE.ffmpegPath();
-    private static String FFPROBE_PATH = Config.INSTANCE.ffprobePath();
-    private static long PHOTO_TIME = Config.INSTANCE.photoTime();
-    private static long VIDEO_DELAY = Config.INSTANCE.videoDelay();
-    private static String RESULT_FULLPATH = Config.INSTANCE.resultFullPath();
-    private static String RESULT_START = Config.INSTANCE.resultStartVideoFile();
-    private static String RESULT_FINISH = Config.INSTANCE.resultFinishVideoFile();
+    private final String FFMPEG_PATH = Config.INSTANCE.ffmpegPath();
+    private final String FFPROBE_PATH = Config.INSTANCE.ffprobePath();
+    private final long PHOTO_TIME = Config.INSTANCE.photoTime();
+    private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
+    private final String RESULT_FULLPATH = Config.INSTANCE.resultFullPath();
+    private final String RESULT_START = Config.INSTANCE.resultStartVideoFile();
+    private final String RESULT_FINISH = Config.INSTANCE.resultFinishVideoFile();
 
     public MovieWithPhotoMaker(List<File> videoFiles, List<File> photoFiles) {
         this.videoFiles = videoFiles;

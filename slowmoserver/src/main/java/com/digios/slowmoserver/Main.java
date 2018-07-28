@@ -17,22 +17,23 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start app");
         try {
-            String deviceId = "09a4e13302983c73";
+            //String deviceId = "09a4e13302983c73";
 
-            Device device = new AdbDevice(Config.INSTANCE.adbPath());
+            Device device = new AdbDevice("09a4e13302983c73");
             logger.info(device.getDeviceList());
-            device.callPhoto(deviceId);
+            /*device.callPhoto();
             //device.callSlowmo("84ea8cec");
 
-            Thread.sleep(Config.INSTANCE.waitTime());
+            Thread.sleep(Config.INSTANCE.waitTime());*/
 
-            /*SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-            Path targetPath = Paths.get(Config.INSTANCE.mediaFolder(), deviceId, dateFormat.format(new Date()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+            Path targetPath = Paths.get(Config.INSTANCE.mediaFolder(), device.getDeviceId(), dateFormat.format(new Date()));
             Utils.createPath(targetPath);
 
-            device.pullFile(deviceId, Config.INSTANCE.mobilePhotoPath(), targetPath.toString());*/
-            Thread.sleep(1000);
-            device.clearFolder(deviceId, Config.INSTANCE.mobilePhotoPath());
+            List<String> fileList = device.pullFiles(Config.INSTANCE.mobilePhotoPath(), targetPath.toString());
+            logger.info(fileList);
+            /*Thread.sleep(1000);
+            device.clearFolder(Config.INSTANCE.mobilePhotoPath());*/
 
 
             /*List<File> photoFiles = new ArrayList<File>();

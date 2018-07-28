@@ -6,6 +6,9 @@ import org.ini4j.IniPreferences;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 public class Config {
@@ -30,11 +33,11 @@ public class Config {
     }
 
     public String ffmpegPath() {
-        return prefs.node("app").get("FFMPEG", "./bin/ffmpeg.exe");
+        return prefs.node("app").get("FFMPEG", "./bin/ffmpeg/ffmpeg.exe");
     }
 
     public String ffprobePath() {
-        return prefs.node("app").get("FFPROBE", "./bin/ffprobe.exe");
+        return prefs.node("app").get("FFPROBE", "./bin/ffmpeg/ffprobe.exe");
     }
 
     public long photoTime() {
@@ -58,7 +61,7 @@ public class Config {
     }
 
     public String adbPath() {
-        return prefs.node("app").get("ADB", null);
+        return prefs.node("app").get("ADB", "./bin/adb/adb.exe");
     }
 
     public String mobilePhotoPath() {
@@ -67,5 +70,15 @@ public class Config {
 
     public long waitTime() {
         return prefs.node("app").getLong("WAIT", 4000);
+    }
+
+    public List<String> photoDevices() {
+        String devices = prefs.node("app").get("PHOTO_DEVICES", "");
+        return Arrays.asList(devices.split(","));
+    }
+
+    public List<String> slowmoDevices() {
+        String devices = prefs.node("app").get("SLOWMO_DEVICE", "");
+        return Arrays.asList(devices.split(","));
     }
 }
