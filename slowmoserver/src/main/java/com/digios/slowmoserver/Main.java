@@ -1,49 +1,63 @@
 package com.digios.slowmoserver;
 
+import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
         logger.info("Start app");
+
+        Options options = new Options();
+
+        Option typeOption = new Option("t", "type", true, "type program [server, slowmo1, slowmo2]");
+        typeOption.setRequired(true);
+        options.addOption(typeOption);
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
+
         try {
-            //String deviceId = "09a4e13302983c73";
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            logger.error(e.getMessage());
+            formatter.printHelp("slowmoserver", options);
 
-            Device device = new AdbDevice("09a4e13302983c73");
-            logger.info(device.getDeviceList());
-            /*device.callPhoto();
-            //device.callSlowmo("84ea8cec");
-
-            Thread.sleep(Config.INSTANCE.waitTime());*/
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-            Path targetPath = Paths.get(Config.INSTANCE.mediaFolder(), device.getDeviceId(), dateFormat.format(new Date()));
-            Utils.createPath(targetPath);
-
-            List<String> fileList = device.pullFiles(Config.INSTANCE.mobilePhotoPath(), targetPath.toString());
-            logger.info(fileList);
-            /*Thread.sleep(1000);
-            device.clearFolder(Config.INSTANCE.mobilePhotoPath());*/
+            System.exit(1);
+        }
 
 
-            /*List<File> photoFiles = new ArrayList<File>();
-            photoFiles.add(new File("d:/Temp/media/1.jpg"));
 
-            List<File> videoFiles = new ArrayList<File>();
-            videoFiles.add(new File("d:/Temp/media/001.mp4"));
+        try {
+            String type = cmd.getOptionValue("type");
+            if (type.equals("server")) {
+                WebSocketEchoServer server = new WebSocketEchoServer( 8887 );
+                server.start();
 
-            MovieMaker movieMaker = new MovieWithPhotoMaker(videoFiles, photoFiles);
-            movieMaker.render();*/
+                BufferedReader sysin = new BufferedReader( new InputStreamReader( System.in ) );
+                while ( true ) {
+                    String in = sysin.readLine();
+                    server.broadcast( in );
+                    if( in.equals( "exit" ) ) {
+                        server.stop(1000);
+                        break;
+                    }
+                }
+            }
+            else if (type.equals("slowmo1")) {
+
+            }
+            else if (type.equals("slowmo2")) {
+                logger.error("Programm type " + type + " not implemented");
+            }
+            else {
+                logger.error("Programm type " + type + " not implemented");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -74,11 +74,17 @@ public class Config {
 
     public List<String> photoDevices() {
         String devices = prefs.node("app").get("PHOTO_DEVICES", "");
-        return Arrays.asList(devices.split(","));
+        if (!devices.isEmpty())
+            return Arrays.asList(devices.split(","));
+
+        return new ArrayList<>();
     }
 
     public List<String> slowmoDevices() {
         String devices = prefs.node("app").get("SLOWMO_DEVICE", "");
-        return Arrays.asList(devices.split(","));
+        if (!devices.isEmpty())
+            return Arrays.asList(devices.split(","));
+
+        return new ArrayList<>();
     }
 }
