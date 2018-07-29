@@ -87,4 +87,8 @@ public class Config {
 
         return new ArrayList<>();
     }
+
+    public String host() {
+        return prefs.node("app").get("HOST", null);
+    }
 }

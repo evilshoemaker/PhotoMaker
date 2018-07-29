@@ -1,5 +1,8 @@
 package com.digios.slowmoserver;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
@@ -7,14 +10,12 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
     final static Logger logger = Logger.getLogger(PhotoMakerAlgoritm1.class);
@@ -104,7 +105,16 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
     }
 
     private void sendResult(String fileResult) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("cmd", "result");
+        map.put("path", fileResult);
 
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+
+        String json = gson.toJson(map);
+        send(json);
     }
 
     @Override
@@ -113,8 +123,21 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
     }
 
     @Override
-    public void onMessage(String s) {
+    public void onMessage(String json) {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> map = gson.fromJson(json, type);
+
+        if (map.containsKey("cmd") && map.get("cmd").equals("shoot")) {
+            try {
+                excecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
