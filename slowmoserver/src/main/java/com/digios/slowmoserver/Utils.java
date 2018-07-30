@@ -87,4 +87,12 @@ public class Utils {
     public static void createPath(Path pathToFile) throws IOException {
         Files.createDirectories(pathToFile);
     }
+
+    public static String createTempFolder() throws IOException {
+        String folderName = Utils.randomUUIDString();
+        Path pathToFile = Paths.get(Variables.tempDirPath(), folderName);
+        Files.createDirectories(pathToFile);
+
+        return pathToFile.toString();
+    }
 }

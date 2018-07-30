@@ -62,7 +62,17 @@ public class Main {
                 }
             }
             else if (type.equals("slowmo2")) {
-                logger.error("Programm type " + type + " not implemented");
+                PhotoMakerAlgoritm2 pm = new PhotoMakerAlgoritm2(new URI(Config.INSTANCE.host()));
+                pm.connect();
+
+                BufferedReader sysin = new BufferedReader( new InputStreamReader( System.in ) );
+                while ( true ) {
+                    String in = sysin.readLine();
+                    if( in.equals( "exit" ) ) {
+                        pm.close();
+                        break;
+                    }
+                }
             }
             else {
                 logger.error("Programm type " + type + " not implemented");
