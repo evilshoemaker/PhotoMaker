@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -25,11 +26,21 @@ public class Utils {
         return directoryToBeDeleted.delete();
     }
 
+    public static void executeCommandNotWait(String command) {
+        try {
+            Runtime.getRuntime().exec(command);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String executeCommand(String command) {
         StringBuffer inputString = new StringBuffer();
 
         try {
             Process process = Runtime.getRuntime().exec(command);
+
             StreamGobbler inputStreamGobbler = new StreamGobbler(process.getInputStream(), (x) ->
                         {
                             inputString.append(x);
@@ -94,5 +105,54 @@ public class Utils {
         Files.createDirectories(pathToFile);
 
         return pathToFile.toString();
+    }
+
+    public static File lastFileModified(String dir, boolean isSlowMo) {
+        try {
+            File fl = new File(dir);
+            File[] files = fl.listFiles(new FileFilter() {
+                public boolean accept(File file) {
+                    boolean assept =  (file.isFile() && (file.getName().contains(".jpg") || file.getName().contains(".mp4") || file.getName().contains(".png")));
+                    if (isSlowMo) {
+                        if (file.getName().contains(".mp4")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else return assept;
+                }
+            });
+            long lastMod = Long.MIN_VALUE;
+            File choice = null;
+            for (File file : files) {
+                BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                if (attr.creationTime().toMillis() > lastMod) {
+                    choice = file;
+                    lastMod = attr.lastAccessTime().toMillis();
+                }
+            }
+            return choice;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        try {
+            return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String getFileExtension(String file) {
+        String name = file;
+        try {
+            return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

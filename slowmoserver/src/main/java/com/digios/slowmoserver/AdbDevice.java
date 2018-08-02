@@ -41,23 +41,19 @@ public class AdbDevice implements Device {
 
     @Override
     public void callPhoto() {
-        String command = String.format("adb -s %s shell input keyevent 27", deviceId);
-        String result = Utils.executeCommand(command);
-        if (!result.isEmpty())
-            logger.info(result);
+        String command = String.format("%s -s %s shell input keyevent 27", ADB_PATH, deviceId);
+        Utils.executeCommandNotWait(command);
     }
 
     @Override
     public void callSlowmo() {
-        String command = String.format("adb -s %s shell input keyevent 130", deviceId);
-        String result = Utils.executeCommand(command);
-        if (!result.isEmpty())
-            logger.info(result);
+        String command = String.format("%s -s %s shell input keyevent 130", ADB_PATH, deviceId);
+        Utils.executeCommandNotWait(command);
     }
 
     @Override
     public List<String> pullFiles(String source, String target) {
-        String command = String.format("adb -s %s pull -a %s \"%s\"", deviceId, source, target);
+        String command = String.format("%s -s %s pull -a %s \"%s\"", ADB_PATH, deviceId, source, target);
         String result = Utils.executeCommand(command);
         if (!result.isEmpty())
             logger.info(result);
@@ -77,7 +73,7 @@ public class AdbDevice implements Device {
 
     @Override
     public void clearFolder(String path) {
-        String command = String.format("adb -s %s shell ls %s", deviceId, path);
+        String command = String.format("%s -s %s shell ls %s", ADB_PATH, deviceId, path);
         String result = Utils.executeCommand(command);
 
         if (!result.isEmpty())
@@ -89,7 +85,7 @@ public class AdbDevice implements Device {
 
         for (String file : lines) {
             String fullPath = path + file;
-            command = String.format("adb -s %s shell rm -f %s", deviceId, fullPath);
+            command = String.format("%s -s %s shell rm -f %s", ADB_PATH, deviceId, fullPath);
             result = Utils.executeCommand(command);
             if (!result.isEmpty())
                 logger.info(result);

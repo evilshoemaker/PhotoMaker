@@ -71,8 +71,9 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
             List<String> fileList = d.pullFiles(Config.INSTANCE.mobilePhotoPath(), targetPath.toString());
             d.clearFolder(Config.INSTANCE.mobilePhotoPath());
 
-            if (!fileList.isEmpty())
-                photoFiles.add(0, new File(fileList.get(0)));
+            videoFiles.add(0, Utils.lastFileModified(targetPath.toString(), false));
+            /*if (!fileList.isEmpty())
+                photoFiles.add(0, new File(fileList.get(0)));*/
         }
     }
 
@@ -105,15 +106,23 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
                 .setPrettyPrinting()
                 .create();
 
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String, String> map = gson.fromJson(json, type);
+        try {
+            Type type = new TypeToken<Map<String, String>>() {
+            }.getType();
+            Map<String, String> map = gson.fromJson(json, type);
 
-        if (map.containsKey("cmd") && map.get("cmd").equals("shoot")) {
-            try {
-                excecute();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (map.containsKey("cmd") && map.get("cmd").equals("shoot")) {
+                logger.info("Server command shoot");
+
+                try {
+                    excecute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        }
+        catch (Exception ex) {
+            logger.error(ex);
         }
     }
 
@@ -125,6 +134,8 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        logger.info("Reconnect");
         reconnect();
     }
 
@@ -137,6 +148,8 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+
+        logger.info("Reconnect");
         reconnect();
     }
 }

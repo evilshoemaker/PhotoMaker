@@ -23,6 +23,9 @@ public class MovieWithPhotoMaker extends MovieMaker {
     public MovieWithPhotoMaker(List<File> videoFiles, List<File> photoFiles) {
         this.videoFiles = videoFiles;
         this.photoFiles = photoFiles;
+
+        logger.info(videoFiles);
+        logger.info(photoFiles);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class MovieWithPhotoMaker extends MovieMaker {
         Path finishVideo = Paths.get(RESULT_FULLPATH, resultVideo.getFileName().toString());
         Files.copy(resultVideo, finishVideo, StandardCopyOption.REPLACE_EXISTING);
 
-        removeTempFolder(tempFolder);
+        //removeTempFolder(tempFolder);
 
         return finishVideo.toString();
     }

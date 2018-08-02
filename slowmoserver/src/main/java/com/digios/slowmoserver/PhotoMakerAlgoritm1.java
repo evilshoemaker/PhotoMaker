@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -84,8 +85,19 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
         {
             List<String> fileList = slowmoDevice.pullFiles(Config.INSTANCE.mobilePhotoPath(), targetPath.toString());
             slowmoDevice.clearFolder(Config.INSTANCE.mobilePhotoPath());
-            if (!fileList.isEmpty())
-                videoFiles.add(new File(fileList.get(0)));
+
+            //videoFiles.add(0, Utils.lastFileModified(targetPath.toString(), false));
+            logger.info(fileList);
+
+            if (!fileList.isEmpty()) {
+                for (String file : fileList)
+                {
+                    if (Utils.getFileExtension(file).equals("mp4")) {
+                        videoFiles.add(new File(file));
+                        break;
+                    }
+                }
+            }
         }
 
 
@@ -94,8 +106,22 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
             List<String> fileList = d.pullFiles(Config.INSTANCE.mobilePhotoPath(), targetPath.toString());
             d.clearFolder(Config.INSTANCE.mobilePhotoPath());
 
-            if (!fileList.isEmpty())
+            //photoFiles.add(0,Utils.lastFileModified(targetPath.toString(), false));
+
+            logger.info(fileList);
+
+            /*if (!fileList.isEmpty()) {
                 photoFiles.add(0, new File(fileList.get(0)));
+            }*/
+            if (!fileList.isEmpty()) {
+                for (String file : fileList)
+                {
+                    if (Utils.getFileExtension(file).equals("jpg")) {
+                        photoFiles.add(new File(file));
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -128,15 +154,22 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
                 .setPrettyPrinting()
                 .create();
 
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String, String> map = gson.fromJson(json, type);
+        try {
+            Type type = new TypeToken<Map<String, String>>() {
+            }.getType();
+            Map<String, String> map = gson.fromJson(json, type);
 
-        if (map.containsKey("cmd") && map.get("cmd").equals("shoot")) {
-            try {
-                excecute();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (map.containsKey("cmd") && map.get("cmd").equals("shoot")) {
+                logger.info("Server command shoot");
+                try {
+                    excecute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        }
+        catch (Exception ex) {
+            logger.error(ex);
         }
     }
 
@@ -148,6 +181,8 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        logger.info("Reconnect");
         reconnect();
     }
 
@@ -160,6 +195,8 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+
+        logger.info("Reconnect");
         reconnect();
     }
 }
