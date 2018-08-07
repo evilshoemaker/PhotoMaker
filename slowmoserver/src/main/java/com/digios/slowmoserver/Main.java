@@ -1,7 +1,13 @@
 package com.digios.slowmoserver;
 
 import com.digios.slowmoserver.gui.MainForm;
+import com.digios.slowmoserver.websocketserver.WebSocketEchoServer;
+import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
@@ -9,9 +15,9 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start app");
 
-        new MainForm();
+        //new MainForm();
 
-        /*Options options = new Options();
+        Options options = new Options();
 
         Option typeOption = new Option("t", "type", true, "type program [server, slowmo1, slowmo2]");
         typeOption.setRequired(true);
@@ -42,7 +48,7 @@ public class Main {
                     server.broadcast( in );
                     if( in.equals( "exit" ) ) {
                         server.stop(1000);
-                        break;
+                        System.exit(0);
                     }
                 }
             }
@@ -55,7 +61,7 @@ public class Main {
                     String in = sysin.readLine();
                     if( in.equals( "exit" ) ) {
                         pm.close();
-                        break;
+                        System.exit(0);
                     }
                 }
             }
@@ -68,18 +74,19 @@ public class Main {
                     String in = sysin.readLine();
                     if( in.equals( "exit" ) ) {
                         pm.close();
-                        break;
+                        System.exit(0);
                     }
                 }
             }
             else {
-                logger.error("Programm type " + type + " not implemented");
+                //logger.error("Programm type " + type + " not implemented");
+                new MainForm();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.exit(0);*/
+        //System.exit(0);
     }
 }

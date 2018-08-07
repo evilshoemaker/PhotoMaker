@@ -1,5 +1,6 @@
 package com.digios.slowmoserver.websocketserver;
 
+import com.digios.slowmoserver.command.GalleryResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,6 +12,8 @@ import org.java_websocket.server.WebSocketServer;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WebSocketEchoServer extends WebSocketServer {
@@ -46,13 +49,24 @@ public class WebSocketEchoServer extends WebSocketServer {
 
             if (map.containsKey("cmd")) {
                 if (map.get("cmd").equals("shoot") || map.get("cmd").equals("ready")) {
+                    logger.info(message);
                     broadcast(message);
                 }
                 else if (map.get("cmd").equals("save")) {
+                    logger.info(message);
                     DataBase.addUserInfo(map.get("file"), map.get("email"));
                 }
                 else if (map.get("cmd").equals("result")) {
+                    logger.info(message);
                     DataBase.addFile(map.get("path"));
+                }
+                else if (map.get("cmd").equals("refresh")) {
+                    List<String> files = DataBase.getFiles();
+
+                    GalleryResponse galleryResponse = new GalleryResponse(files);
+
+                    String json = gson.toJson(galleryResponse);
+                    webSocket.send(json);
                 }
             }
         }
