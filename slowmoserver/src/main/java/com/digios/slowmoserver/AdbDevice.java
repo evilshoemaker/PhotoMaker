@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 public class AdbDevice implements Device {
     final static Logger logger = Logger.getLogger(AdbDevice.class);
@@ -20,8 +21,7 @@ public class AdbDevice implements Device {
         return deviceId;
     }
 
-    @Override
-    public List<String> getDeviceList() {
+    public static List<String> getDeviceList() {
         List<String> resultList = new ArrayList<>();
 
         String command = "adb devices";
@@ -48,6 +48,18 @@ public class AdbDevice implements Device {
     @Override
     public void callSlowmo() {
         String command = String.format("%s -s %s shell input keyevent 130", ADB_PATH, deviceId);
+        Utils.executeCommandNotWait(command);
+    }
+
+    @Override
+    public void callFocus() {
+        String command = String.format("%s -s %s shell input keyevent KEYCODE_FOCUS", ADB_PATH, deviceId);
+        Utils.executeCommandNotWait(command);
+    }
+
+    @Override
+    public void openCamera() {
+        String command = String.format("%s -s %s shell am start -a android.media.action.IMAGE_CAPTURE", ADB_PATH, deviceId);
         Utils.executeCommandNotWait(command);
     }
 

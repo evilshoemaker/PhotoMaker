@@ -91,4 +91,8 @@ public class Config {
     public String host() {
         return prefs.node("app").get("HOST", null);
     }
+
+    public int touthInterval() {
+        return prefs.node("app").getInt("TOUCH_INTRERVAL", 10);
+    }
 }

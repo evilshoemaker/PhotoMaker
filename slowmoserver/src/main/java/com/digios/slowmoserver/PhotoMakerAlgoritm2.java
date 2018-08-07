@@ -15,12 +15,15 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
+public class PhotoMakerAlgoritm2 extends PhotoMaker {
     final static Logger logger = Logger.getLogger(PhotoMakerAlgoritm2.class);
 
-    List<Device> slowmoDeviceList = new ArrayList<>();
-    List<File> photoFiles = new ArrayList<File>();
-    List<File> videoFiles = new ArrayList<File>();
+    private List<Device> slowmoDeviceList = new ArrayList<>();
+    private List<File> photoFiles = new ArrayList<File>();
+    private List<File> videoFiles = new ArrayList<File>();
+
+    private Timer refocusTimer = new Timer();
+    private boolean refocusTimerPaused = false;
 
     private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
     private final long WAIT = Config.INSTANCE.waitTime();
@@ -35,6 +38,8 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
         for (String d : list) {
             slowmoDeviceList.add(new AdbDevice(d));
         }
+
+        refocusTimer.schedule(new PhotoMakerAlgoritm2.CameraRefocusTimerTask(), 1000, Config.INSTANCE.touthInterval());
     }
 
     @Override
@@ -151,5 +156,16 @@ public class PhotoMakerAlgoritm2 extends WebSocketClient implements PhotoMaker {
 
         logger.info("Reconnect");
         reconnect();
+    }
+
+    class CameraRefocusTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if (!refocusTimerPaused) {
+                for (Device d : slowmoDeviceList) {
+                    d.callFocus();
+                }
+            }
+        }
     }
 }

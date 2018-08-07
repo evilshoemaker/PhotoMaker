@@ -18,29 +18,22 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
+public class PhotoMakerAlgoritm1 extends PhotoMaker {
     final static Logger logger = Logger.getLogger(PhotoMakerAlgoritm1.class);
 
-    List<Device> photoDevicesList = new ArrayList<>();
-    Device slowmoDevice = null;
-    List<File> photoFiles = new ArrayList<File>();
-    List<File> videoFiles = new ArrayList<File>();
+    private List<Device> photoDevicesList = new ArrayList<>();
+    private Device slowmoDevice = null;
+    private List<File> photoFiles = new ArrayList<File>();
+    private List<File> videoFiles = new ArrayList<File>();
+
+    private Timer refocusTimer = new Timer();
+    private boolean refocusTimerPaused = false;
 
     private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
     private final long WAIT = Config.INSTANCE.waitTime();
 
-    public PhotoMakerAlgoritm1(URI serverUri , Draft draft) {
-        super( serverUri, draft );
-        init();
-    }
-
     public PhotoMakerAlgoritm1(URI serverURI) {
         super( serverURI );
-        init();
-    }
-
-    public PhotoMakerAlgoritm1(URI serverUri, Map<String, String> httpHeaders) {
-        super(serverUri, httpHeaders);
         init();
     }
 
@@ -52,19 +45,32 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
 
         if (!Config.INSTANCE.slowmoDevices().isEmpty())
             slowmoDevice = new AdbDevice(Config.INSTANCE.slowmoDevices().get(0));
+
+        refocusTimer.schedule(new CameraRefocusTimerTask(), 1000, Config.INSTANCE.touthInterval());
     }
 
     @Override
     public void excecute() throws Exception {
+        refocusTimerPaused = true;
+
         photoFiles.clear();
         videoFiles.clear();
 
         getMediaFile();
         String resultFile = makeVideo();
         sendResult(resultFile);
+
+        refocusTimerPaused = false;
     }
 
     private void getMediaFile() throws Exception {
+
+        for (Device d : photoDevicesList) {
+            d.openCamera();
+        }
+
+        Thread.sleep(1000);
+
         if (slowmoDevice != null) {
             slowmoDevice.callSlowmo();
 
@@ -198,5 +204,13 @@ public class PhotoMakerAlgoritm1 extends WebSocketClient implements PhotoMaker {
 
         logger.info("Reconnect");
         reconnect();
+    }
+
+    class CameraRefocusTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if (slowmoDevice != null && !refocusTimerPaused)
+                slowmoDevice.callFocus();
+        }
     }
 }

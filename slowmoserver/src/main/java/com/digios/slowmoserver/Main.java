@@ -1,11 +1,7 @@
 package com.digios.slowmoserver;
 
-import org.apache.commons.cli.*;
+import com.digios.slowmoserver.gui.MainForm;
 import org.apache.log4j.Logger;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URI;
 
 public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
@@ -13,7 +9,9 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start app");
 
-        Options options = new Options();
+        new MainForm();
+
+        /*Options options = new Options();
 
         Option typeOption = new Option("t", "type", true, "type program [server, slowmo1, slowmo2]");
         typeOption.setRequired(true);
@@ -82,6 +80,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.exit(0);
+        System.exit(0);*/
     }
 }
