@@ -22,7 +22,7 @@ public class Main {
             new MainForm();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            ex.printStackTrace();
         }
 
         //new MainForm();
