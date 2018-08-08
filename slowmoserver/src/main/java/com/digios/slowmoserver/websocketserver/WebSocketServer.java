@@ -1,6 +1,7 @@
 package com.digios.slowmoserver.websocketserver;
 
 import com.digios.slowmoserver.command.GalleryResponse;
+import com.digios.slowmoserver.gui.MainMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,15 +12,22 @@ import org.java_websocket.handshake.ClientHandshake;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
     final static Logger logger = Logger.getLogger(WebSocketServer.class);
 
-    interface WebSocketServerListener {
+    public interface WebSocketServerListener {
         void onShot();
     }
+
+    public void addListener(WebSocketServerListener toAdd) {
+        listeners.add(toAdd);
+    }
+
+    private List<WebSocketServer.WebSocketServerListener> listeners = new ArrayList<WebSocketServer.WebSocketServerListener>();
 
     public WebSocketServer(int port ) throws UnknownHostException {
         super( new InetSocketAddress( port ) );
@@ -45,6 +53,8 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String message) {
+        logger.info(message);
+
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
@@ -54,16 +64,14 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
             Map<String, String> map = gson.fromJson(message, type);
 
             if (map.containsKey("cmd")) {
-                if (map.get("cmd").equals("shoot") || map.get("cmd").equals("ready")) {
-                    logger.info(message);
-                    broadcast(message);
+                if (map.get("cmd").equals("shoot")) {
+                    for (WebSocketServerListener hl : listeners)
+                        hl.onShot();
                 }
                 else if (map.get("cmd").equals("save")) {
-                    logger.info(message);
                     DataBase.addUserInfo(map.get("file"), map.get("email"));
                 }
                 else if (map.get("cmd").equals("result")) {
-                    logger.info(message);
                     DataBase.addFile(map.get("path"));
                 }
                 else if (map.get("cmd").equals("refresh")) {
@@ -75,6 +83,8 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
                     webSocket.send(json);
                 }
             }
+
+            broadcast(message);
         }
         catch (Exception ex) {
             logger.error(ex);

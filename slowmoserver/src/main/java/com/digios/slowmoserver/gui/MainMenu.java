@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MainMenu extends JMenuBar implements ActionListener {
 
-    interface MainMenuListener {
+    public interface MainMenuListener {
         void onCommand(String cmd);
     }
 
@@ -28,6 +28,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 
         JRadioButtonMenuItem jmiAlgorithm1 = new JRadioButtonMenuItem("Algoritm 1");
         jmiAlgorithm1.addActionListener(this);
+        jmiAlgorithm1.setSelected(true);
         algorithmGroup.add(jmiAlgorithm1);
         jmSettings.add(jmiAlgorithm1);
 
