@@ -1,4 +1,4 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.device;
 
 import java.util.List;
 

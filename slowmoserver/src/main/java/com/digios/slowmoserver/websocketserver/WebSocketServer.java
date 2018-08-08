@@ -7,24 +7,30 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.server.WebSocketServer;
 
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WebSocketEchoServer extends WebSocketServer {
-    final static Logger logger = Logger.getLogger(WebSocketEchoServer.class);
+public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
+    final static Logger logger = Logger.getLogger(WebSocketServer.class);
 
-    public WebSocketEchoServer( int port ) throws UnknownHostException {
+    interface WebSocketServerListener {
+        void onShot();
+    }
+
+    public WebSocketServer(int port ) throws UnknownHostException {
         super( new InetSocketAddress( port ) );
     }
 
-    public WebSocketEchoServer( InetSocketAddress address ) {
+    public WebSocketServer(InetSocketAddress address ) {
         super( address );
+    }
+
+    public void sendBroadcast(String message) {
+        broadcast(message);
     }
 
     @Override

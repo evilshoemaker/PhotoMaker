@@ -1,15 +1,14 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.photomaker;
 
+import com.digios.slowmoserver.core.Config;
+import com.digios.slowmoserver.core.Utils;
+import com.digios.slowmoserver.device.AdbDevice;
+import com.digios.slowmoserver.device.Device;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.File;
-import java.lang.reflect.Type;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -28,8 +27,7 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
     private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
     private final long WAIT = Config.INSTANCE.waitTime();
 
-    public PhotoMakerAlgoritm2(URI serverUri) {
-        super(serverUri);
+    public PhotoMakerAlgoritm2() {
         init();
     }
 
@@ -97,10 +95,10 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
                 .create();
 
         String json = gson.toJson(map);
-        send(json);
+        //send(json);
     }
 
-    @Override
+    /*@Override
     public void onOpen(ServerHandshake serverHandshake) {
         logger.info("Opened connection");
     }
@@ -156,7 +154,7 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
 
         logger.info("Reconnect");
         reconnect();
-    }
+    }*/
 
     class CameraRefocusTimerTask extends TimerTask {
         @Override

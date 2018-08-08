@@ -1,4 +1,4 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.core;
 
 import java.io.File;
 import java.io.IOException;

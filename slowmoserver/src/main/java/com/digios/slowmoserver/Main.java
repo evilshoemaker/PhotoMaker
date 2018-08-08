@@ -1,7 +1,7 @@
 package com.digios.slowmoserver;
 
 import com.digios.slowmoserver.gui.MainForm;
-import com.digios.slowmoserver.websocketserver.WebSocketEchoServer;
+import com.digios.slowmoserver.websocketserver.WebSocketServer;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
@@ -15,9 +15,19 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start app");
 
+        try {
+            //WebSocketServer server = new WebSocketServer(8887);
+            //server.start();
+
+            new MainForm();
+        }
+        catch (Exception ex) {
+            logger.error(ex);
+        }
+
         //new MainForm();
 
-        Options options = new Options();
+        /*Options options = new Options();
 
         Option typeOption = new Option("t", "type", true, "type program [server, slowmo1, slowmo2]");
         typeOption.setRequired(true);
@@ -39,7 +49,7 @@ public class Main {
         try {
             String type = cmd.getOptionValue("type");
             if (type.equals("server")) {
-                WebSocketEchoServer server = new WebSocketEchoServer( 8887 );
+                WebSocketServer server = new WebSocketServer( 8887 );
                 server.start();
 
                 BufferedReader sysin = new BufferedReader( new InputStreamReader( System.in ) );
@@ -85,7 +95,7 @@ public class Main {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         //System.exit(0);
     }

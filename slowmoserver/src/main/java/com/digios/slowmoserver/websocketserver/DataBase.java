@@ -1,6 +1,6 @@
 package com.digios.slowmoserver.websocketserver;
 
-import com.digios.slowmoserver.Config;
+import com.digios.slowmoserver.core.Config;
 import org.apache.log4j.Logger;
 
 import java.sql.*;

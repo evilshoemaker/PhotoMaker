@@ -1,11 +1,10 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.core;
 
 import org.apache.log4j.Logger;
 import org.ini4j.Ini;
 import org.ini4j.IniPreferences;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

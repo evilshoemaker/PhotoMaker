@@ -1,4 +1,4 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.core;
 
 public class Command {
     private String cmd = "";

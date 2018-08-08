@@ -1,5 +1,7 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.photomaker;
 
+import com.digios.slowmoserver.core.Config;
+import com.digios.slowmoserver.core.Utils;
 import org.apache.log4j.Logger;
 
 import java.io.*;

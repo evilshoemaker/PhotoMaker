@@ -1,11 +1,11 @@
-package com.digios.slowmoserver;
+package com.digios.slowmoserver.device;
 
+import com.digios.slowmoserver.core.Config;
+import com.digios.slowmoserver.core.Utils;
 import org.apache.log4j.Logger;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 public class AdbDevice implements Device {
     final static Logger logger = Logger.getLogger(AdbDevice.class);

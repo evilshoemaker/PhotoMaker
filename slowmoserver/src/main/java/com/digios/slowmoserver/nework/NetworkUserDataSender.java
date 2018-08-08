@@ -1,5 +1,6 @@
-package com.digios.slowmoserver.websocketserver;
+package com.digios.slowmoserver.nework;
 
+import com.digios.slowmoserver.core.Looper;
 import org.apache.log4j.Logger;
 
 import java.util.Timer;
@@ -15,6 +16,7 @@ public class NetworkUserDataSender extends Thread {
             public void run() {
                 try {
                     //do the processing
+                    logger.info("timer");
                 }
                 catch (Exception ex) {
                     logger.error(ex);
@@ -23,14 +25,8 @@ public class NetworkUserDataSender extends Thread {
         };
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(sendTimerTask, 3000, 10);
+        timer.scheduleAtFixedRate(sendTimerTask, 3000, 1000);
 
-        while(true) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                logger.error(e);
-            }
-        }
+        Looper.loop();
     }
 }
