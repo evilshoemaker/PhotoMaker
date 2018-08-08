@@ -6,27 +6,39 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PhotoMaker extends Thread {
+public class PhotoMaker {
     final static Logger logger = Logger.getLogger(PhotoMaker.class);
+
+
+    public interface PhotoMakerListener {
+        void onResult(String message);
+    }
+
+    public void addListener(PhotoMakerListener toAdd) {
+        listeners.add(toAdd);
+    }
+
+    private List<PhotoMakerListener> listeners = new ArrayList<PhotoMakerListener>();
 
     public PhotoMaker() {
 
     }
-    @Override
-    public void run()
-    {
-        try {
-            excecute();
-        }
-        catch (Exception ex)  {
-            logger.error(ex);
-        }
+
+    public void ready() throws Exception {
+        throw new Exception("no implementation");
     }
 
 
-    void excecute() throws Exception {
+    public void excecute() throws Exception {
         throw new Exception("no implementation");
+    }
+
+    protected void sendResult(String message) {
+        for (PhotoMakerListener pm : listeners)
+            pm.onResult(message);
     }
 
 }

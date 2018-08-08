@@ -1,7 +1,7 @@
 package com.digios.slowmoserver.websocketserver;
 
 import com.digios.slowmoserver.command.GalleryResponse;
-import com.digios.slowmoserver.gui.MainMenu;
+import com.digios.slowmoserver.database.DataBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -21,6 +21,8 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
 
     public interface WebSocketServerListener {
         void onShot();
+        void onReady();
+        void onMessage(String message);
     }
 
     public void addListener(WebSocketServerListener toAdd) {
@@ -64,9 +66,17 @@ public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
             Map<String, String> map = gson.fromJson(message, type);
 
             if (map.containsKey("cmd")) {
+
+                for (WebSocketServerListener hl : listeners)
+                    hl.onMessage(message);
+
                 if (map.get("cmd").equals("shoot")) {
                     for (WebSocketServerListener hl : listeners)
                         hl.onShot();
+                }
+                else if (map.get("cmd").equals("ready")) {
+                    for (WebSocketServerListener hl : listeners)
+                        hl.onReady();
                 }
                 else if (map.get("cmd").equals("save")) {
                     DataBase.addUserInfo(map.get("file"), map.get("email"));

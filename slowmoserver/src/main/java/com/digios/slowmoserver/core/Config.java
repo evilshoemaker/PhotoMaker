@@ -106,4 +106,8 @@ public class Config {
     public String dbPassword() {
         return prefs.node("app").get("DB_PASSWORD", null);
     }
+
+    public String saveUrl() {
+        return prefs.node("app").get("SAVE_URL", null);
+    }
 }

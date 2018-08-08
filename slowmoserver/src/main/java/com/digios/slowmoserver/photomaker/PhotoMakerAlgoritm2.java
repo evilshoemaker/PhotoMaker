@@ -42,21 +42,32 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
 
     @Override
     public void excecute() throws Exception {
+        refocusTimerPaused = true;
 
-        /*videoFiles.clear();
-        videoFiles.add(new File("d:\\Temp\\media\\video\\001.mp4"));
-        videoFiles.add(new File("d:\\Temp\\media\\video\\002.mp4"));
-        videoFiles.add(new File("d:\\Temp\\media\\video\\003.mp4"));
-        videoFiles.add(new File("d:\\Temp\\media\\video\\004.mp4"));
+        logger.info("alg2 start");
+        Thread.sleep(10000);
+        logger.info("alg2 stop");
 
-        String resultFile = makeVideo();*/
+        sendResult("alg2");
 
-        photoFiles.clear();
-        videoFiles.clear();
+        /*try {
+            photoFiles.clear();
+            videoFiles.clear();
 
-        getMediaFile();
-        String resultFile = makeVideo();
-        sendResult(resultFile);
+            getMediaFile();
+            String resultFile = makeVideo();
+            sendResult(resultFile);
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
+        finally {
+            refocusTimerPaused = false;
+        }*/
+    }
+
+    @Override
+    public void ready() throws Exception {
     }
 
     private void getMediaFile() throws Exception {
@@ -85,7 +96,7 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
         return movieMaker.render();
     }
 
-    private void sendResult(String fileResult) {
+    /*private void sendResult(String fileResult) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("cmd", "result");
         map.put("path", fileResult);
@@ -96,7 +107,7 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
 
         String json = gson.toJson(map);
         //send(json);
-    }
+    }*/
 
     /*@Override
     public void onOpen(ServerHandshake serverHandshake) {

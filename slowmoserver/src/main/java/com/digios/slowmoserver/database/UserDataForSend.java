@@ -1,5 +1,6 @@
-package com.digios.slowmoserver.websocketserver;
+package com.digios.slowmoserver.database;
 
+import javax.print.attribute.DateTimeSyntax;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +10,13 @@ public class UserDataForSend {
     private long id;
     private String email;
     private String fileName;
+    private String createAt;
 
-    public UserDataForSend(long id, String email, String fileName) {
+    public UserDataForSend(long id, String email, String fileName, String createAt) {
         this.id = id;
         this.email = email;
         this.fileName = fileName;
+        this.createAt = createAt;
     }
 
     public long getId() {
@@ -32,7 +35,8 @@ public class UserDataForSend {
 
         Map<String, String> map = new HashMap<>();
         map.put("email", email);
-        map.put("file", fileName);
+        map.put("filename", fileName);
+        map.put("createAt", createAt);
 
         return map;
     }

@@ -48,15 +48,37 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
     public void excecute() throws Exception {
         refocusTimerPaused = true;
 
-        photoFiles.clear();
-        videoFiles.clear();
+        logger.info("alg1 start");
+        Thread.sleep(10000);
+        logger.info("alg1 stop");
 
-        getMediaFile();
-        String resultFile = makeVideo();
-        sendResult(resultFile);
+        sendResult("alg1");
 
-        refocusTimerPaused = false;
+
+        /*try {
+
+            photoFiles.clear();
+            videoFiles.clear();
+
+            getMediaFile();
+            String resultFile = makeVideo();
+            sendResult(resultFile);
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
+        finally {
+            refocusTimerPaused = false;
+        }*/
     }
+
+    @Override
+    public void ready() throws Exception {
+        for (Device d : photoDevicesList) {
+            d.openCamera();
+        }
+    }
+
 
     private void getMediaFile() throws Exception {
 
@@ -131,7 +153,7 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
         return movieMaker.render();
     }
 
-    private void sendResult(String fileResult) {
+    /*private void sendResult(String fileResult) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("cmd", "result");
         map.put("path", fileResult);
@@ -142,7 +164,7 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
 
         String json = gson.toJson(map);
         //send(json);
-    }
+    }*/
 
     /*@Override
     public void onOpen(ServerHandshake serverHandshake) {
