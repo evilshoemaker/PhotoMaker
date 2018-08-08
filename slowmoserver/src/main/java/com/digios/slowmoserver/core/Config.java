@@ -87,6 +87,18 @@ public class Config {
         return new ArrayList<>();
     }
 
+    public List<String> tabDevices() {
+        String devices = prefs.node("app").get("TAB_DEVICES", "");
+        if (!devices.isEmpty())
+            return Arrays.asList(devices.split(","));
+
+        return new ArrayList<>();
+    }
+
+    public String tabFolder() {
+        return prefs.node("app").get("TAB_FOLDER", "");
+    }
+
     public String host() {
         return prefs.node("app").get("HOST", null);
     }

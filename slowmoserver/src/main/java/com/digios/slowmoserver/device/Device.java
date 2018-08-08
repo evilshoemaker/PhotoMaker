@@ -10,5 +10,6 @@ public interface Device {
     void callFocus();
     void openCamera();
     List<String> pullFiles(String source, String target);
+    void pushFile(String sourceFile, String targetFile);
     void clearFolder(String path);
 }

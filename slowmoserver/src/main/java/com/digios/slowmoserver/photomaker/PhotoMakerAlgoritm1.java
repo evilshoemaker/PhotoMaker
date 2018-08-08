@@ -19,20 +19,20 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
 
     private List<Device> photoDevicesList = new ArrayList<>();
     private Device slowmoDevice = null;
+
     private List<File> photoFiles = new ArrayList<File>();
     private List<File> videoFiles = new ArrayList<File>();
 
     private Timer refocusTimer = new Timer();
     private boolean refocusTimerPaused = false;
 
-    private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
-    private final long WAIT = Config.INSTANCE.waitTime();
-
     public PhotoMakerAlgoritm1() {
         init();
     }
 
-    private void init() {
+    protected void init() {
+        super.init();
+
         List<String> list = Config.INSTANCE.photoDevices();
         for (String d : list) {
             photoDevicesList.add(new AdbDevice(d));
@@ -41,21 +41,19 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
         if (!Config.INSTANCE.slowmoDevices().isEmpty())
             slowmoDevice = new AdbDevice(Config.INSTANCE.slowmoDevices().get(0));
 
+        list = Config.INSTANCE.tabDevices();
+        for (String d : list) {
+            tabDeviceList.add(new AdbDevice(d));
+        }
+
         refocusTimer.schedule(new CameraRefocusTimerTask(), 1000, Config.INSTANCE.touthInterval());
     }
 
     @Override
-    public void excecute() throws Exception {
+    public void execute() throws Exception {
         refocusTimerPaused = true;
 
-        logger.info("alg1 start");
-        Thread.sleep(10000);
-        logger.info("alg1 stop");
-
-        sendResult("alg1");
-
-
-        /*try {
+        try {
 
             photoFiles.clear();
             videoFiles.clear();
@@ -63,13 +61,14 @@ public class PhotoMakerAlgoritm1 extends PhotoMaker {
             getMediaFile();
             String resultFile = makeVideo();
             sendResult(resultFile);
+            copyFoleToTab(resultFile);
         }
         catch (Exception ex) {
             throw ex;
         }
         finally {
             refocusTimerPaused = false;
-        }*/
+        }
     }
 
     @Override

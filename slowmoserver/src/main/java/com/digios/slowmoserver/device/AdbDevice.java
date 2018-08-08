@@ -84,6 +84,12 @@ public class AdbDevice implements Device {
     }
 
     @Override
+    public void pushFile(String sourceFile, String targetFile) {
+        String command = String.format("%s -s %s push %s \"%s\"", ADB_PATH, deviceId, sourceFile, targetFile);
+        Utils.executeCommandNotWait(command);
+    }
+
+    @Override
     public void clearFolder(String path) {
         String command = String.format("%s -s %s shell ls %s", ADB_PATH, deviceId, path);
         String result = Utils.executeCommand(command);

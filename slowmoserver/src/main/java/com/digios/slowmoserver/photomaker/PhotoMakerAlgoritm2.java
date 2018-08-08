@@ -18,20 +18,20 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
     final static Logger logger = Logger.getLogger(PhotoMakerAlgoritm2.class);
 
     private List<Device> slowmoDeviceList = new ArrayList<>();
+
     private List<File> photoFiles = new ArrayList<File>();
     private List<File> videoFiles = new ArrayList<File>();
 
     private Timer refocusTimer = new Timer();
     private boolean refocusTimerPaused = false;
 
-    private final long VIDEO_DELAY = Config.INSTANCE.videoDelay();
-    private final long WAIT = Config.INSTANCE.waitTime();
-
     public PhotoMakerAlgoritm2() {
         init();
     }
 
-    private void init() {
+    protected void init() {
+        super.init();
+
         List<String> list = Config.INSTANCE.slowmoDevices();
         for (String d : list) {
             slowmoDeviceList.add(new AdbDevice(d));
@@ -41,29 +41,24 @@ public class PhotoMakerAlgoritm2 extends PhotoMaker {
     }
 
     @Override
-    public void excecute() throws Exception {
+    public void execute() throws Exception {
         refocusTimerPaused = true;
 
-        logger.info("alg2 start");
-        Thread.sleep(10000);
-        logger.info("alg2 stop");
-
-        sendResult("alg2");
-
-        /*try {
+        try {
             photoFiles.clear();
             videoFiles.clear();
 
             getMediaFile();
             String resultFile = makeVideo();
             sendResult(resultFile);
+            copyFoleToTab(resultFile);
         }
         catch (Exception ex) {
             throw ex;
         }
         finally {
             refocusTimerPaused = false;
-        }*/
+        }
     }
 
     @Override

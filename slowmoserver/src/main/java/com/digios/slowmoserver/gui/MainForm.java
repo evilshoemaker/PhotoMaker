@@ -73,7 +73,7 @@ public class MainForm extends JFrame {
                         public void run() {
                             if (photoMaker != null) {
                                 try {
-                                    photoMaker.excecute();
+                                    photoMaker.execute();
                                 } catch (Exception e) {
                                     logger.error(e);
                                 }
