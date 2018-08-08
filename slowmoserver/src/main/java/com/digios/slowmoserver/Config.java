@@ -95,4 +95,16 @@ public class Config {
     public int touthInterval() {
         return prefs.node("app").getInt("TOUCH_INTRERVAL", 10);
     }
+
+    public String dbConnection() {
+        return prefs.node("app").get("DB_CONNECTION", null);
+    }
+
+    public String dbUser() {
+        return prefs.node("app").get("DB_USER", null);
+    }
+
+    public String dbPassword() {
+        return prefs.node("app").get("DB_PASSWORD", null);
+    }
 }

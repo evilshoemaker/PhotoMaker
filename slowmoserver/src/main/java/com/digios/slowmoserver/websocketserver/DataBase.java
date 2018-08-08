@@ -1,5 +1,6 @@
 package com.digios.slowmoserver.websocketserver;
 
+import com.digios.slowmoserver.Config;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -10,9 +11,9 @@ public class DataBase {
     final static Logger logger = Logger.getLogger(DataBase.class);
 
     private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/slowmo_db?autoReconnect=true&useSSL=false";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_CONNECTION = Config.INSTANCE.dbConnection();//"jdbc:mysql://localhost:3306/slowmo_db?autoReconnect=true&useSSL=false";
+    private static final String DB_USER = Config.INSTANCE.dbUser();//"root";
+    private static final String DB_PASSWORD = Config.INSTANCE.dbPassword();//"123456";
 
     public DataBase() {
     }

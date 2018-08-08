@@ -16,7 +16,9 @@ public class NetworkUserDataSender extends Thread {
                 try {
                     //do the processing
                 }
-                catch (Exception ex) {}
+                catch (Exception ex) {
+                    logger.error(ex);
+                }
             }
         };
 
@@ -24,7 +26,11 @@ public class NetworkUserDataSender extends Thread {
         timer.scheduleAtFixedRate(sendTimerTask, 3000, 10);
 
         while(true) {
-
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                logger.error(e);
+            }
         }
     }
 }
