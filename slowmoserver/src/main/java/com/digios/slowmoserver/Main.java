@@ -13,7 +13,7 @@ public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("Start app");
+        logger.info("Start app v. 0.5");
 
         try {
             //WebSocketServer server = new WebSocketServer(8887);

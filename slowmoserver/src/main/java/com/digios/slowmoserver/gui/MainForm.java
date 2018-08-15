@@ -109,7 +109,7 @@ public class MainForm extends JFrame {
 
                 deviceList.setText("");
                 devices.forEach((deviceId) -> {
-                    deviceList.append(deviceId);
+                    deviceList.append(deviceId + "\n");
                 });
             }
         });

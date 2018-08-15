@@ -24,7 +24,7 @@ public class AdbDevice implements Device {
     public static List<String> getDeviceList() {
         List<String> resultList = new ArrayList<>();
 
-        String command = "adb devices";
+        String command = String.format("%s devices", ADB_PATH);
         String result = Utils.executeCommand(command);
 
         String lines[] = result.split("\\r?\\n");

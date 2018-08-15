@@ -1,5 +1,8 @@
 package com.digios.slowmoserver.core;
 
+import com.digios.slowmoserver.gui.MainForm;
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class Utils {
+    final static Logger logger = Logger.getLogger(Utils.class);
 
     public static String randomUUIDString() {
         UUID uuid = UUID.randomUUID();
@@ -28,7 +32,20 @@ public class Utils {
 
     public static void executeCommandNotWait(String command) {
         try {
-            Runtime.getRuntime().exec(command);
+            Process process = Runtime.getRuntime().exec(command);
+
+            StreamGobbler inputStreamGobbler = new StreamGobbler(process.getInputStream(), (x) ->
+            {
+                logger.info(x);
+            });
+
+            StreamGobbler errorStreamGobbler = new StreamGobbler(process.getErrorStream(), (x) ->
+            {
+                logger.info(x);
+            });
+
+            Executors.newSingleThreadExecutor().submit(inputStreamGobbler);
+            Executors.newSingleThreadExecutor().submit(errorStreamGobbler);
         }
         catch (Exception e) {
             e.printStackTrace();
